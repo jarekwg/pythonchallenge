@@ -19,13 +19,14 @@ print('map'.translate(translation))
 # Q2 - http://www.pythonchallenge.com/pc/def/ocr.html
 from collections import Counter  # noqa isort:skip
 text = requests.get('http://www.pythonchallenge.com/pc/def/ocr.html').text
-Counter(re.search(r'find rare characters in the mess below:.*<!--(?P<chars>.*)-->', text, flags=re.DOTALL).groupdict()['chars'])
+chars = re.search(r'find rare characters in the mess below:.*<!--(?P<chars>.*)-->', text, flags=re.DOTALL).groupdict()['chars']
+print(''.join(k for k, v in Counter(chars).items() if v == 1))
 
 
 # Q3 - http://www.pythonchallenge.com/pc/def/equality.html
 text = requests.get('http://www.pythonchallenge.com/pc/def/equality.html').text
 garbage = re.search(r'<!--(?P<garbage>.*)-->', text, flags=re.DOTALL).groupdict()['garbage']
-''.join(re.findall(r'[^A-Z][A-Z]{3}(?P<smol>[a-z])[A-Z]{3}[^A-Z]', garbage))
+print(''.join(re.findall(r'[^A-Z][A-Z]{3}(?P<smol>[a-z])[A-Z]{3}[^A-Z]', garbage)))
 
 
 # Q4 - http://www.pythonchallenge.com/pc/def/linkedlist.php
@@ -107,7 +108,7 @@ plt.figure()
 plt.plot(first[::2], first[1::2], '.-')
 plt.plot(second[::2], second[1::2], '.-')
 plt.gca().invert_yaxis()
-plt.show()
+plt.show(block=False)
 
 
 # Q10 - http://www.pythonchallenge.com/pc/return/bull.html
@@ -182,6 +183,7 @@ i.show()
 # he ain't the youngest, he is the second
 # todo: buy flowers for tomorrow
 # -> wikipedia Jan 27 1xx6
+# TODO: Have a go at figuring out the year in Python.
 
 
 # Q16 - http://www.pythonchallenge.com/pc/return/mozart.html
