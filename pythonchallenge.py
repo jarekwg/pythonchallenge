@@ -97,7 +97,7 @@ print('pw:', codecs.decode(codecs.decode(auth['pw'], 'unicode_escape').encode('l
 
 
 # Q9 - http://www.pythonchallenge.com/pc/return/good.html
-text = requests.post('http://www.pythonchallenge.com/pc/return/good.html', auth=('huge', 'file')).text
+text = requests.get('http://www.pythonchallenge.com/pc/return/good.html', auth=('huge', 'file')).text
 first, second = re.search(r"first:\n(?P<first>.*?)\n\nsecond:\n(?P<second>.*?)\n\n", text, flags=re.DOTALL).groupdict().values()
 first = list(map(int, ''.join(first.split()).split(',')))
 second = list(map(int, ''.join(second.split()).split(',')))
@@ -216,5 +216,6 @@ for _ in range(400):
     print(f"{text} --> {next_busynothing} [{response.cookies['info']}]")
 print(codecs.decode(urllib.parse.unquote_plus(result, 'latin-1').encode('latin-1'), 'bz2').decode())
 with xmlrpc.client.ServerProxy('http://www.pythonchallenge.com/pc/phonebook.php') as proxy:
-    print(proxy.phone('Bert'))
-"the flowers are on their way"
+    print(proxy.phone('Leopold'))
+# TODO: This bit doesn't work. How to inform daddy?
+response = requests.post('http://www.pythonchallenge.com/pc/stuff/violin.php', data="the flowers are on their way")
