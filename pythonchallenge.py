@@ -156,6 +156,13 @@ for y in range(i.height):
     for x in range(i.width):
         p[x, y] = pixels[y * i.width + x, 0]
 i.show()
+# widths = [i * 2 for i in range(198, 0, -4)]
+# i = Image.new('RGB', (396, 50))
+# p = i.load()
+# for y in range(i.height):
+#     for x in range(widths[y]):
+#         p[x, y] = pixels[sum(widths[:y]) + x, 0]
+# i.show()
 widths = [i // 2 for i in range(200, 1, -1)]
 i = Image.new('RGB', (100, 100))
 p = i.load()
