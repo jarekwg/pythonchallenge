@@ -2,6 +2,7 @@ import codecs
 import re
 import requests
 import xmlrpc.client
+from io import BytesIO
 
 from PIL import Image
 
@@ -57,7 +58,6 @@ print(result)
 
 # Q6 - http://www.pythonchallenge.com/pc/def/channel.html
 import zipfile  # noqa isort:skip
-from io import BytesIO  # noqa isort:skip
 response = requests.get('http://www.pythonchallenge.com/pc/def/channel.zip', stream=True)
 zf = zipfile.ZipFile(BytesIO(response.content))
 next_nothing = '90052'
@@ -156,24 +156,15 @@ for y in range(i.height):
     for x in range(i.width):
         p[x, y] = pixels[y * i.width + x, 0]
 i.show()
-widths = [i * 2 for i in range(198, 0, -4)]
-i = Image.new('RGB', (396, 50))
-p = i.load()
-for y in range(i.height):
-    for x in range(widths[y]):
-        p[x, y] = pixels[sum(widths[:y]) + x, 0]
-i.show()
 widths = [i // 2 for i in range(200, 1, -1)]
 i = Image.new('RGB', (100, 100))
 p = i.load()
 pos = (-1, 0)
 for c in range(len(widths)):
-    dir = (
-        (c + 3) % 4 // 3 - (c + 1) % 4 // 3,
-        (c + 2) % 4 // 3 - c % 4 // 3
-    )
+    xdir = (c + 3) % 4 // 3 - (c + 1) % 4 // 3
+    ydir = (c + 2) % 4 // 3 - c % 4 // 3
     for z in range(widths[c]):
-        pos = (pos[0] + dir[0], pos[1] + dir[1])
+        pos = (pos[0] + xdir, pos[1] + ydir)
         p[pos[0], pos[1]] = pixels[sum(widths[:c]) + z, 0]
 i.show()
 
@@ -225,4 +216,42 @@ response = requests.post('http://www.pythonchallenge.com/pc/stuff/violin.php', c
 print(response.content.decode().split('\n')[-4][:-7])
 
 
-# Q18 - http://www.pythonchallenge.com/pc/return/balloons.html
+# Q18 - http://www.pythonchallenge.com/pc/return/balloons.html, http://www.pythonchallenge.com/pc/return/brightness.html
+import difflib  # noqa isort:skip
+import gzip  # noqa isort:skip
+deltas = requests.get('http://www.pythonchallenge.com/pc/return/deltas.gz', auth=('huge', 'file'), stream=True)
+res = gzip.decompress(deltas.content).decode()
+left = []
+right = []
+for line in res.split('\n'):
+    leftline = line[:53].strip()
+    if leftline:
+        left.append(leftline)
+    rightline = line[56:].strip()
+    if rightline:
+        right.append(rightline)
+same = [d[2:] for d in difflib.ndiff(left, right) if d.startswith('  ')]
+diff_pos = [d[2:] for d in difflib.ndiff(left, right) if d.startswith('+ ')]
+diff_neg = [d[2:] for d in difflib.ndiff(left, right) if d.startswith('- ')]
+Image.open(BytesIO(codecs.decode(''.join(' '.join(same).split()), 'hex'))).show()
+Image.open(BytesIO(codecs.decode(''.join(' '.join(diff_pos).split()), 'hex'))).show()
+Image.open(BytesIO(codecs.decode(''.join(' '.join(diff_neg).split()), 'hex'))).show()
+
+
+# Q19 - http://www.pythonchallenge.com/pc/hex/bin.html
+import os  # noqa isort:skip
+import email  # noqa isort:skip
+text = requests.get('http://www.pythonchallenge.com/pc/hex/bin.html', auth=('butter', 'fly')).text
+raw_msg = re.search(r'<!--\n(?P<raw_msg>.*)-->', text, flags=re.DOTALL).groupdict()['raw_msg']
+msg = email.message_from_string(raw_msg)
+for part in msg.walk():
+    if not part.is_multipart():
+        open(f'q19_{part.get_filename()}', 'wb').write(part.get_payload(decode=True))
+print('File written out to q19_...')
+os.system('open q19_indian.wav')
+
+# http://www.pythonchallenge.com/pc/hex/sorry.html
+# - "what are you apologizing for?"
+
+# http://www.pythonchallenge.com/pc/hex/india.html
+# nnn. what could this mean?
