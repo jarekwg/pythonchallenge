@@ -98,12 +98,11 @@ print('pw:', codecs.decode(codecs.decode(auth['pw'], 'unicode_escape').encode('l
 
 
 # Q9 - http://www.pythonchallenge.com/pc/return/good.html
+import matplotlib.pyplot as plt  # noqa isort:skip
 text = requests.get('http://www.pythonchallenge.com/pc/return/good.html', auth=('huge', 'file')).text
 first, second = re.search(r"first:\n(?P<first>.*?)\n\nsecond:\n(?P<second>.*?)\n\n", text, flags=re.DOTALL).groupdict().values()
 first = list(map(int, ''.join(first.split()).split(',')))
 second = list(map(int, ''.join(second.split()).split(',')))
-
-import matplotlib.pyplot as plt  # noqa isort:skip
 plt.figure()
 plt.plot(first[::2], first[1::2], '.-')
 plt.plot(second[::2], second[1::2], '.-')
@@ -180,10 +179,12 @@ i.show()
 
 
 # Q15 - http://www.pythonchallenge.com/pc/return/uzi.html
-# he ain't the youngest, he is the second
+import calendar  # noqa isort:skip
+possible_years = [y for y in range(1006, 1997, 10) if calendar.isleap(y) and calendar.weekday(y, 1, 26) == 0]
+# He ain't the youngest, he is the second.
+print(possible_years[-2])
 # todo: buy flowers for tomorrow
-# -> wikipedia Jan 27 1xx6
-# TODO: Have a go at figuring out the year in Python.
+# -> wikipedia Jan 27 1756
 
 
 # Q16 - http://www.pythonchallenge.com/pc/return/mozart.html
@@ -201,6 +202,7 @@ for y in range(image.height):
     for x in range(image.width):
         p[(x - offset) % image.width, y] = pixels[x, y]
 i.show()
+
 
 # Q17 - http://www.pythonchallenge.com/pc/return/romance.html
 import urllib.parse  # noqa isort:skip
