@@ -221,5 +221,8 @@ for _ in range(400):
 print(codecs.decode(urllib.parse.unquote_plus(result, 'latin-1').encode('latin-1'), 'bz2').decode())
 with xmlrpc.client.ServerProxy('http://www.pythonchallenge.com/pc/phonebook.php') as proxy:
     print(proxy.phone('Leopold'))
-# TODO: This bit doesn't work. How to inform daddy?
-response = requests.post('http://www.pythonchallenge.com/pc/stuff/violin.php', data="the flowers are on their way")
+response = requests.post('http://www.pythonchallenge.com/pc/stuff/violin.php', cookies={'info': 'the flowers are on their way'})
+print(response.content.decode().split('\n')[-4][:-7])
+
+
+# Q18 - http://www.pythonchallenge.com/pc/return/balloons.html
